@@ -8,7 +8,7 @@
 #
 
 # CRAP script - Coffeecrack Reporting And Processing script.
-# Updated 2015-04-06
+# Updated 2015-04-07
 #
 # Copyright (C) 2015 Jordan Walsh <jordan.walsh@protonmail.ch>
 # This program is free software: you can redistribute it and/or modify
@@ -256,8 +256,9 @@ sub myhash
 			{
 				chomp $_;
 				print "Found the file \"$_\"\n";
-#				`rm $out`;
+				`rm $out`;
 				`touch $out`;
+				$switch = ('');
 				$usernames = ((`head -n 1 $_`) =~ tr/:/:/); #detects if there are users in the input file
 
 				if ($usernames == 1)
@@ -297,14 +298,10 @@ sub myhash
 						`touch .temp`;
 						`$hashcat --username --show $_ > .temp`;
 						`mv .temp $out`;
+						`sed -i '\/\\x0d/g' $out`; #Fixes hashcat's end of lines
+						`sed -i '1d' $out`;
 					}
-				`cp $out .out.bak`; #Debugging
 				`sed -i '\/\\x0d/g' $out`; #Fixes hashcat's end of lines
-				`sed -i '\/\^\\s\*\$\/d' $out`; #Removes empty lines from out file
-				`sed -i '1d' $out`; #remove the first 2 line in the outfile
-				`sed -i '1d' $out`;
-				`head -n -1 $out > .temp`; #Removes last line from outfile
-				`mv .temp $out`;
 				$total = `wc -l $_|cut -d ' ' -f1`;
 				&report;
 			}
@@ -312,7 +309,7 @@ sub myhash
 		}
 		@done = (); #reset variables back to default
 		@files = ();
-		$usernames = ();
+#		$usernames = ();
 
 	}
 
@@ -322,6 +319,8 @@ sub report
 		@user = ();
 		@hash = ();
 		@pass = ();
+		@currentline = ();
+		$length = ();
 		open (my $fh, "<", $out) or die "$!";
 		while (<$fh>)
 		{
@@ -344,7 +343,7 @@ sub report
 		{
 			@currentline = (split(/\/, $_));
 
-			if ($usernames == 0) #without usernames
+			if ($usernames != 1) #without usernames
 			{
 				push @hash, $currentline[0];
 				push @pass, $currentline[1];
