@@ -132,9 +132,34 @@ sub myswitch
 		switch ($sel)
 		{
 			case 1 		{ system("clear"); #About
-						print "Inset help here.\n";
-						print "\nPress ENTER to continue";
-						<STDIN>;} #insert help here.
+						system ("echo 'The Crap menu provides an easy to use interface to process hashes using 
+Hashcat, and create reports, saving them to the local web server. 
+Once GIT has been installed, you can download the latest version 
+of the crap script by typing:
+
+git clone https://github.com/Jordan2586/CoffeeCrack
+
+You can update the scripts by entering the CoffeeCrack directory 
+and typing:
+
+git pull
+
+By default, Crap scans 2 directories for .hash files: /ftp and the 
+directory which crap was run in. Once a file has been processed, its 
+name will be placed in a file called .done, so that it is not 
+processed a second time. This done file can be deleted manually, or 
+in the “Edit Options” menu. The “Edit Options” menu will also allow 
+you to specify the location of hashcat, the attack mode of hashcat, 
+the location of the reports, among other options. The information 
+provided on the right side of the menu are the current value(s) of 
+that option, or its current size if applicable. Note that changing 
+these values will not change the defaults that are set in the script 
+itself. The Crap menu is able to detect whether or not usernames are 
+included in the hash file, and is able to include that information 
+in the generated report.
+
+Press q to quit.'|less");
+						}
 
 			case 2		{&mymenu2();} #Edit Options
 
