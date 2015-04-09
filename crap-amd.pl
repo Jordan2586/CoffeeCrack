@@ -8,7 +8,8 @@
 #
 
 # CRAP script - Coffeecrack Reporting And Processing script.
-# Updated 2015-04-07
+# For AMD cards with oclHashcat 1.32
+# Updated 2015-04-08
 #
 # Copyright (C) 2015 Jordan Walsh <jordan.walsh@protonmail.ch>
 # This program is free software: you can redistribute it and/or modify
@@ -49,6 +50,13 @@ my (@path, #Contains what directories should be scanned for .hash files
 	$length, #Average password length
 	$found, #Number of found hashes
 	$total, #Number of total hashes
+	$perc, #percent of the found hashes
+	$small, #amount of users who have small passwords
+	@smallusers, #users who have small passwords.
+	$symbols, #amount of users who dont have symbols
+	@symbolsusers, #users who have no symbols in their passwords.
+	$numbers, #amount of users who dont have numbers in their passwords.
+	@numbersusers, #users who dont have numbers in their passwords.
 	$figlet, #ASCII art
 	@lines, #Stores each line from outfile
 	@currentline, #Stores info from the current @lines, separated at 
@@ -309,7 +317,6 @@ sub myhash
 		}
 		@done = (); #reset variables back to default
 		@files = ();
-#		$usernames = ();
 
 	}
 
@@ -321,6 +328,13 @@ sub report
 		@pass = ();
 		@currentline = ();
 		$length = ();
+		$perc = ();
+		$small = (0);
+		@smallusers = ();
+		$symbols = (0);
+		@symbolsusers = ();
+		$numbers = (0);
+		@numbersusers = ();
 		open (my $fh, "<", $out) or die "$!";
 		while (<$fh>)
 		{
@@ -348,6 +362,18 @@ sub report
 				push @hash, $currentline[0];
 				push @pass, $currentline[1];
 				$length += length($currentline[1]);
+				if (length($currentline[1]) < 6)
+					{
+						$small++;
+					}
+				if ($currentline[1] !~ m/[a..z|A..Z|0..9]/)
+					{
+						$symbols++;
+					}
+				if ($currentline[1] !~ m/\d+/)
+					{
+						$numbers++;
+					}
 			}
 
 			if ($usernames == 1) #with usernames
@@ -356,11 +382,28 @@ sub report
 				push @hash, $currentline[1];
 				push @pass, $currentline[2];
 				$length += length($currentline[2]);
+				if (length($currentline[2]) < 6)
+					{
+						$small++;
+						push @smallusers, $currentline[0];
+					}
+				if ($currentline[2] !~ m/[a..z|A..Z|0..9]/)
+					{
+						$symbols++;
+						push @symbolsusers, $currentline[0];
+					}
+				if ($currentline[2] !~ m/\d+/)
+					{
+						$numbers++;
+						push @numbersusers, $currentline[0];
+					}
 			}
 		}
 		$found = (scalar @pass);
 		$length = ($length / $found);
 		$length = (sprintf "%.2f", $length); #round to 2 decimals
+		$perc = (($found / $total) * 100);
+		$perc = (sprintf "%.2f", $perc);
 		chomp ($date = `date +"%F %T"`);
 		chomp ($timer = `date +"%s"` - $timer);
 		$timer = ($timer / 60); #seconds to minutes
@@ -381,9 +424,12 @@ th, td {
 <h1>Report of file $out at $date.</h1>
 </head>
 <body>
-<p>We found $found of the $total hashes. <br/>
-The average password length is $length characters. <br/>
-It took $timer minutes to process the hashes.</p></br></hr></br>
+<p><b>We found $found of the $total hashes. ($perc) </b><br/>
+<b>The average password length is $length characters. </b><br/>
+<b>It took $timer minutes to process the hashes.</b><br/>
+<b>$small of users have passwords under 6 characters.</b> (@smallusers) <br/>
+<b>$symbols of users have no symbols in their passwords.</b> (@symbolsusers) <br/>
+<b>$numbers of users have no numbers in their passwords.</b> (@numbersusers) <br/> </p></hr></br>
 <table style="width:100%">' >> "$html/Report at $date\.html"`;
 
 		if ($usernames == 0) #no usernames
