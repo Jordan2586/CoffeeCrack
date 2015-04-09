@@ -10,6 +10,7 @@
 # CRAP script - Coffeecrack Reporting And Processing script.
 # For AMD cards with oclHashcat 1.32
 # Updated 2015-04-08
+# Get the latest version at: https://github.com/Jordan2586/CoffeeCrack/
 #
 # Copyright (C) 2015 Jordan Walsh <jordan.walsh@protonmail.ch>
 # This program is free software: you can redistribute it and/or modify
