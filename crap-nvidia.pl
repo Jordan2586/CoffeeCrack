@@ -450,7 +450,7 @@ th, td {
 <h1>Report of file $out at $date.</h1>
 </head>
 <body>
-<p><b>We found $found of the $total hashes. ($perc) </b><br/>
+<p><b>We found $found of the $total hashes. ($perc %) </b><br/>
 <b>The average password length is $length characters. </b><br/>
 <b>It took $timer minutes to process the hashes.</b><br/>
 <b>$small of users have passwords under 6 characters.</b> (@smallusers) <br/>
