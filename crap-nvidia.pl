@@ -202,7 +202,7 @@ sub myswitch2
 			case 1 		{&mymenu();} #Back to main menu
 
 			case 2 		{ system("clear"); #Edit Hashcat Location
-						print "Enter the full path for oclhashcat32.bin or oclhashcat64.bin: \n";
+						print "Enter the full path for cudaHashcat32.bin or cudaHashcat64.bin: \n";
 						chomp ($hashcat = <STDIN>);}
 
 			case 3		{ system("clear"); #Edit pot file location
