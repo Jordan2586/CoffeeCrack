@@ -9,7 +9,7 @@
 
 # CRAP script - Coffeecrack Reporting And Processing script.
 # For NVidia cards with cudaHashcat 1.35
-# Updated 2015-04-08
+# Updated 2015-04-10
 # Get the latest version at: https://github.com/Jordan2586/CoffeeCrack/
 #
 # Copyright (C) 2015 Jordan Walsh <jordan.walsh@protonmail.ch>
@@ -497,7 +497,7 @@ th, td {
 sub myformat #Formats 2 strings to align left & right on the same line
 	{
 format STDOUT =
-@<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<@>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+@<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<@>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 "$_[0]", "$_[1]"
 .
 write();
